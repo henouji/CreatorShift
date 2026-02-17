@@ -1,0 +1,223 @@
+{
+  "brand": {
+    "name": "CreatorShift",
+    "logo": "../../../assets/images/logo.svg",
+    "tagline": "Empowering Creators, Amplifying Impact"
+  },
+  "navigation": {
+    "links": [
+      { "label": "Home", "path": "/", "fragment": "hero" },
+      { "label": "Services", "path": "/", "fragment": "services" },
+      { "label": "Portfolio", "path": "/", "fragment": "portfolio" },
+      { "label": "About", "path": "/", "fragment": "about" },
+      { "label": "Contact", "path": "/", "fragment": "contact" }
+    ],
+    "ctaButton": {
+      "label": "Book Now",
+      "link": "mailto:contact@creatorshift.com"
+    }
+  },
+  "hero": {
+    "headline": "Transform Your Digital Presence",
+    "subheadline": "We help creators and businesses build powerful brands through strategic content creation, design, and digital marketing.",
+    "primaryCta": {
+      "label": "Get Started",
+      "link": "#services"
+    },
+    "secondaryCta": {
+      "label": "View Our Work",
+      "link": "#portfolio"
+    },
+    "backgroundImage": null,
+    "featuredImage": null
+  },
+  "services": {
+    "sectionTitle": "What We Offer",
+    "sectionSubtitle": "Comprehensive solutions to elevate your brand",
+    "items": [
+      {
+        "id": "content-creation",
+        "icon": "videocam",
+        "title": "Content Creation",
+        "description": "High-quality video production, photography, and graphic design tailored to your brand identity.",
+        "features": ["Video Production", "Photography", "Graphic Design", "Motion Graphics"],
+        "image": "assets/images/service-content.png"
+      },
+      {
+        "id": "social-media",
+        "icon": "share_social",
+        "title": "Social Media Management",
+        "description": "Strategic planning and execution to grow your online presence and engage your audience effectively.",
+        "features": ["Strategy Development", "Content Scheduling", "Community Management", "Analytics & Reporting"],
+        "image": "assets/images/service-social.png"
+      },
+      {
+        "id": "brand-identity",
+        "icon": "brush",
+        "title": "Brand Identity",
+        "description": "Create a memorable brand that resonates with your target audience and stands out from the competition.",
+        "features": ["Logo Design", "Brand Guidelines", "Visual Identity", "Brand Strategy"],
+        "image": "assets/images/service-brand.png"
+      },
+      {
+        "id": "web-development",
+        "icon": "code_slash",
+        "title": "Web Development",
+        "description": "Modern, responsive websites that convert visitors into customers and showcase your brand beautifully.",
+        "features": ["Custom Websites", "E-commerce", "Landing Pages", "Web Applications"],
+        "image": "assets/images/service-web.png"
+      }
+    ]
+  },
+  "portfolio": {
+    "sectionTitle": "Our Work",
+    "sectionSubtitle": "Showcasing our creative excellence",
+    "categories": ["All", "Branding", "Social Media", "Video", "Web Design"],
+    "items": [
+      {
+        "id": 1,
+        "title": "Brand Refresh Campaign",
+        "category": "Branding",
+        "client": "Tech Startup Co.",
+        "image": "assets/images/portfolio-1.png",
+        "description": "Complete brand overhaul including logo, color palette, and brand guidelines."
+      },
+      {
+        "id": 2,
+        "title": "Social Media Growth",
+        "category": "Social Media",
+        "client": "Fashion Brand X",
+        "image": "assets/images/portfolio-2.png",
+        "description": "Grew Instagram following by 300% in 6 months through strategic content."
+      },
+      {
+        "id": 3,
+        "title": "Product Launch Video",
+        "category": "Video",
+        "client": "Lifestyle Brand",
+        "image": "assets/images/portfolio-3.png",
+        "description": "Cinematic product video that generated 1M+ views across platforms."
+      },
+      {
+        "id": 4,
+        "title": "E-commerce Website",
+        "category": "Web Design",
+        "client": "Artisan Goods",
+        "image": "assets/images/portfolio-4.png",
+        "description": "Custom Shopify store with 40% increase in conversion rate."
+      },
+      {
+        "id": 5,
+        "title": "Corporate Identity",
+        "category": "Branding",
+        "client": "Finance Corp",
+        "image": "assets/images/portfolio-5.png",
+        "description": "Professional rebrand for established financial services company."
+      },
+      {
+        "id": 6,
+        "title": "Viral Campaign",
+        "category": "Social Media",
+        "client": "Food & Beverage",
+        "image": "assets/images/portfolio-6.png",
+        "description": "Campaign that reached 5M+ users organically."
+      }
+    ]
+  },
+  "stats": {
+    "items": [
+      { "value": 150, "suffix": "+", "label": "Projects Completed" },
+      { "value": 50, "suffix": "+", "label": "Happy Clients" },
+      { "value": 5, "suffix": "M+", "label": "Reach Generated" },
+      { "value": 98, "suffix": "%", "label": "Client Satisfaction" }
+    ]
+  },
+  "about": {
+    "sectionTitle": "About Us",
+    "sectionSubtitle": "The team behind the creativity",
+    "headline": "We're passionate about helping creators succeed",
+    "description": "CreatorShift is a full-service creative agency dedicated to empowering content creators, influencers, and businesses. Our team combines strategic thinking with creative execution to deliver results that matter.",
+    "image": "assets/images/about-team.png",
+    "values": [
+      {
+        "icon": "lightbulb",
+        "title": "Innovation",
+        "description": "We stay ahead of trends to keep your brand relevant."
+      },
+      {
+        "icon": "people",
+        "title": "Collaboration",
+        "description": "Your vision combined with our expertise creates magic."
+      },
+      {
+        "icon": "trophy",
+        "title": "Excellence",
+        "description": "We deliver nothing less than exceptional quality."
+      }
+    ]
+  },
+  "testimonials": {
+    "sectionTitle": "What Clients Say",
+    "sectionSubtitle": "Don't just take our word for it",
+    "items": [
+      {
+        "id": 1,
+        "content": "CreatorShift transformed our entire brand presence. Their team understood our vision perfectly and delivered beyond expectations.",
+        "author": "Maria Santos",
+        "role": "CEO, Tech Innovations",
+        "avatar": "assets/images/testimonial-1.png",
+        "rating": 5
+      },
+      {
+        "id": 2,
+        "content": "The social media strategy they developed helped us grow from 10K to 100K followers in just 8 months. Incredible results!",
+        "author": "James Chen",
+        "role": "Founder, Lifestyle Co.",
+        "avatar": "assets/images/testimonial-2.png",
+        "rating": 5
+      },
+      {
+        "id": 3,
+        "content": "Professional, creative, and results-driven. They're our go-to team for all content creation needs.",
+        "author": "Ana Reyes",
+        "role": "Marketing Director",
+        "avatar": "assets/images/testimonial-3.png",
+        "rating": 5
+      }
+    ]
+  },
+  "cta": {
+    "headline": "Ready to Transform Your Brand?",
+    "subheadline": "Let's create something amazing together. Book a free consultation today.",
+    "buttonLabel": "Book Now",
+    "buttonLink": "mailto:contact@creatorshift.com",
+    "backgroundImage": "assets/images/cta-bg.png"
+  },
+  "contact": {
+    "sectionTitle": "Get In Touch",
+    "sectionSubtitle": "Let's start a conversation",
+    "email": "contact@creatorshift.com",
+    "phone": "+63 912 345 6789",
+    "address": "Manila, Philippines",
+    "social": [
+      { "platform": "facebook", "url": "https://facebook.com/creatorshift", "icon": "logo_facebook" },
+      { "platform": "instagram", "url": "https://instagram.com/creatorshift", "icon": "logo_instagram" },
+      { "platform": "linkedin", "url": "https://linkedin.com/company/creatorshift", "icon": "logo_linkedin" },
+      { "platform": "twitter", "url": "https://twitter.com/creatorshift", "icon": "logo_twitter" }
+    ],
+    "formFields": [
+      { "name": "name", "label": "Your Name", "type": "text", "required": true },
+      { "name": "email", "label": "Email Address", "type": "email", "required": true },
+      { "name": "phone", "label": "Phone Number", "type": "tel", "required": false },
+      { "name": "service", "label": "Service Interested In", "type": "select", "required": true, "options": ["Content Creation", "Social Media Management", "Brand Identity", "Web Development", "Other"] },
+      { "name": "message", "label": "Your Message", "type": "textarea", "required": true }
+    ]
+  },
+  "footer": {
+    "copyright": "© 2026 CreatorShift. All rights reserved.",
+    "links": [
+      { "label": "Privacy Policy", "url": "/privacy" },
+      { "label": "Terms of Service", "url": "/terms" }
+    ]
+  }
+}

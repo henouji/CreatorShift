@@ -1,0 +1,124 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease-out;
+}
+
+.modal {
+  background-color: var(--card-bg);
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  max-height: calc(100vh - 2rem);
+  display: flex;
+  flex-direction: column;
+  animation: slideIn 0.2s ease-out;
+
+  // Sizes
+  &--sm {
+    width: 100%;
+    max-width: 24rem;
+  }
+
+  &--md {
+    width: 100%;
+    max-width: 32rem;
+  }
+
+  &--lg {
+    width: 100%;
+    max-width: 48rem;
+  }
+
+  &--xl {
+    width: 100%;
+    max-width: 64rem;
+  }
+
+  &--full {
+    width: calc(100vw - 2rem);
+    height: calc(100vh - 2rem);
+    max-width: none;
+  }
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--text-color);
+  }
+
+  &__close {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background: none;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 1rem;
+    transition: background-color 0.2s, color 0.2s;
+
+    &:hover {
+      background-color: var(--hover-bg);
+      color: var(--text-color);
+    }
+  }
+
+  &__body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    flex: 1;
+
+    &--no-padding {
+      padding: 0;
+    }
+  }
+
+  &__footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+    flex-shrink: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

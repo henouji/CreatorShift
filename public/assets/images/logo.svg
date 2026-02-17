@@ -1,0 +1,10 @@
+<svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Icon -->
+  <rect x="2" y="2" width="36" height="36" rx="8" fill="#6366f1" stroke="#4f46e5" stroke-width="2"/>
+  <path d="M12 14l8 6-8 6V14z" fill="white"/>
+  <circle cx="28" cy="20" r="3" fill="white"/>
+  
+  <!-- Text -->
+  <text x="48" y="16" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#1f2937">Creator</text>
+  <text x="48" y="30" font-family="Inter, sans-serif" font-size="14" font-weight="600" fill="#6366f1">Shift</text>
+</svg>
