@@ -13,8 +13,8 @@
       { "label": "Contact", "path": "/", "fragment": "contact" }
     ],
     "ctaButton": {
-      "label": "Book Now",
-      "link": "mailto:contact@creatorshift.com"
+      "label": "Contact Us",
+      "link": "#contact"
     }
   },
   "hero": {
@@ -42,14 +42,6 @@
         "description": "High-quality video production, photography, and graphic design tailored to your brand identity.",
         "features": ["Video Production", "Photography", "Graphic Design", "Motion Graphics"],
         "image": "assets/images/service-content.png"
-      },
-      {
-        "id": "social-media",
-        "icon": "share_social",
-        "title": "Social Media Management",
-        "description": "Strategic planning and execution to grow your online presence and engage your audience effectively.",
-        "features": ["Strategy Development", "Content Scheduling", "Community Management", "Analytics & Reporting"],
-        "image": "assets/images/service-social.png"
       },
       {
         "id": "brand-identity",
@@ -189,8 +181,8 @@
   "cta": {
     "headline": "Ready to Transform Your Brand?",
     "subheadline": "Let's create something amazing together. Book a free consultation today.",
-    "buttonLabel": "Book Now",
-    "buttonLink": "mailto:contact@creatorshift.com",
+    "buttonLabel": "Contact Us",
+    "buttonLink": "#contact",
     "backgroundImage": "assets/images/cta-bg.png"
   },
   "contact": {

@@ -3,4 +3,165 @@
 @use 'styles/mixins' as *;
 @use 'styles/base' as *;
 
-// Additional global utilities can be added here
+// Global Button Utilities
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  border: 1px solid transparent;
+  font-family: inherit;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.15);
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none !important;
+  }
+
+  // Sizes
+  &-sm {
+    padding: 0.5rem 0.875rem;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+  }
+
+  &-md {
+    padding: 0.625rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  &-lg {
+    padding: 0.875rem 1.5rem;
+    font-size: 1rem;
+  }
+
+  &-xl {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+  }
+
+  // Block
+  &-block {
+    width: 100%;
+    justify-content: center;
+  }
+
+  // Primary variant
+  &-primary {
+    background: var(--primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+
+    &:hover:not(:disabled) {
+      background: var(--primary-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(var(--primary-rgb), 0.4);
+    }
+
+    &:active:not(:disabled) {
+      transform: translateY(0);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.3);
+    }
+  }
+
+  // Secondary variant
+  &-secondary {
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    border-color: var(--border-color);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+    &:hover:not(:disabled) {
+      background: var(--hover-bg);
+      border-color: var(--primary);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Outline variant
+  &-outline-primary {
+    background: transparent;
+    color: var(--primary);
+    border-color: var(--primary);
+
+    &:hover:not(:disabled) {
+      background: var(--primary);
+      color: white;
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.25);
+    }
+  }
+
+  // Ghost variant
+  &-ghost {
+    background: transparent;
+    color: var(--text-primary);
+    border-color: transparent;
+
+    &:hover:not(:disabled) {
+      background: var(--hover-bg);
+    }
+  }
+
+  // Danger variant
+  &-danger {
+    background: var(--danger-color);
+    color: white;
+    box-shadow: 0 4px 12px rgba(var(--danger-rgb), 0.3);
+
+    &:hover:not(:disabled) {
+      background: var(--danger-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(var(--danger-rgb), 0.4);
+    }
+  }
+
+  // Icon
+  .btn-icon {
+    width: 1.25em;
+    height: 1.25em;
+    flex-shrink: 0;
+
+    &:first-child {
+      margin-left: -0.25em;
+    }
+
+    &:last-child {
+      margin-right: -0.25em;
+    }
+  }
+
+  // Loading spinner
+  .btn-spinner {
+    width: 1em;
+    height: 1em;
+    border: 2px solid transparent;
+    border-top: 2px solid currentColor;
+    border-radius: 50%;
+    animation: btn-spin 1s linear infinite;
+  }
+}
+
+@keyframes btn-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Hidden utility
+.hidden {
+  display: none !important;
+}

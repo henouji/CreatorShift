@@ -76,8 +76,8 @@ import { SiteConfigService } from '../../services/site-config.service';
               <span>Social</span>
             </div>
             <div class="floating-card floating-card-3">
-              <div class="floating-icon">🎬</div>
-              <span>Video</span>
+              <div class="floating-icon">💻</div>
+              <span>Websites</span>
             </div>
           </div>
         </div>
