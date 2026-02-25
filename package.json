@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "serve dist/automation-app/browser -s -n -l 8080",
+    "start": "node server.js",
     "dev": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
@@ -34,7 +34,6 @@
     "@angular/ssr": "^20.3.2",
     "express": "^5.1.0",
     "rxjs": "~7.8.0",
-    "serve": "^14.2.4",
     "tslib": "^2.3.0"
   },
   "devDependencies": {
