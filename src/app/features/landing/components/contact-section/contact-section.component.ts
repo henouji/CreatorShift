@@ -1,12 +1,14 @@
-import { Component, inject, ChangeDetectionStrategy, signal, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { HttpClient } from '@angular/common/http';
 import { SiteConfigService } from '../../services/site-config.service';
 import { SectionHeaderComponent } from '../section-header/section-header.component';
 
 @Component({
   selector: 'app-contact-section',
   standalone: true,
-  imports: [CommonModule, SectionHeaderComponent],
+  imports: [CommonModule, ReactiveFormsModule, SectionHeaderComponent],
   template: `
     <section id="contact" class="contact-section" [attr.aria-labelledby]="'contact-title'">
       <div class="container">
@@ -131,13 +133,26 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
               </div>
               
               <!-- Loading State -->
-              <div class="iframe-loading" [class.hidden]="!isLoading()" [attr.aria-hidden]="!isLoading()">
+              <div class="form-loading" [class.hidden]="!isSubmitting()" [attr.aria-hidden]="!isSubmitting()">
                 <div class="loading-spinner"></div>
-                <p class="loading-text">Loading contact form...</p>
+                <p class="loading-text">Sending message...</p>
+              </div>
+              
+              <!-- Success State -->
+              <div class="form-success" [class.hidden]="!isSuccess()" [attr.aria-hidden]="!isSuccess()">
+                <div class="success-icon">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m9 12 2 2 4-4"/>
+                  </svg>
+                </div>
+                <h4 class="success-title">Message sent successfully!</h4>
+                <p class="success-message">Thank you for your message. We'll get back to you within 24 hours.</p>
+                <button class="btn btn-primary" (click)="resetForm()">Send Another Message</button>
               </div>
               
               <!-- Error State -->
-              <div class="iframe-error" [class.hidden]="!hasError()" [attr.aria-hidden]="!hasError()">
+              <div class="form-error" [class.hidden]="!hasError()" [attr.aria-hidden]="!hasError()">
                 <div class="error-icon">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10"/>
@@ -145,26 +160,144 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
                     <line x1="9" y1="9" x2="15" y2="15"/>
                   </svg>
                 </div>
-                <h4 class="error-title">Unable to load form</h4>
-                <p class="error-message">Please try refreshing the page or contact us directly at {{ contact.email }}</p>
-                <button class="btn btn-outline-primary" (click)="retryLoading()">Try Again</button>
+                <h4 class="error-title">Unable to send message</h4>
+                <p class="error-message">{{ errorMessage() || 'Please try again or contact us directly at ' + contact.email }}</p>
+                <button class="btn btn-outline-primary" (click)="resetError()">Try Again</button>
               </div>
               
-              <!-- Iframe Container -->
-              <div class="iframe-container" [class.loaded]="isLoaded()" [class.hidden]="hasError()">
-                <iframe 
-                  #contactIframe
-                  src="https://n8n-godsgb.southeastasia.cloudapp.azure.com/form/c5ea588e-1f37-413b-98e2-8d3216d45ba2"
-                  class="contact-iframe"
-                  frameborder="0"
-                  scrolling="auto"
-                  allowfullscreen
-                  (load)="onIframeLoad()"
-                  (error)="onIframeError()"
-                  [attr.aria-label]="'Contact form'"
-                  [attr.title]="'Send us a message form'">
-                </iframe>
-              </div>
+              <!-- Contact Form -->
+              <form class="contact-form-fields" [formGroup]="contactForm" (ngSubmit)="onSubmit()" [class.hidden]="isSuccess() || hasError()">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="name" class="form-label">Full Name *</label>
+                    <input 
+                      id="name"
+                      type="text"
+                      formControlName="name"
+                      class="form-control"
+                      [class.invalid]="contactForm.get('name')?.invalid && contactForm.get('name')?.touched"
+                      placeholder="Enter your full name"
+                      required
+                    />
+                    @if (contactForm.get('name')?.invalid && contactForm.get('name')?.touched) {
+                      <span class="form-error-text">Name is required</span>
+                    }
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="email" class="form-label">Email Address *</label>
+                    <input 
+                      id="email"
+                      type="email"
+                      formControlName="email"
+                      class="form-control"
+                      [class.invalid]="contactForm.get('email')?.invalid && contactForm.get('email')?.touched"
+                      placeholder="Enter your email address"
+                      required
+                    />
+                    @if (contactForm.get('email')?.invalid && contactForm.get('email')?.touched) {
+                      <span class="form-error-text">
+                        @if (contactForm.get('email')?.errors?.['required']) {
+                          Email is required
+                        } @else if (contactForm.get('email')?.errors?.['email']) {
+                          Please enter a valid email address
+                        }
+                      </span>
+                    }
+                  </div>
+                </div>
+                
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="phone" class="form-label">Phone Number</label>
+                    <input 
+                      id="phone"
+                      type="tel"
+                      formControlName="phone"
+                      class="form-control"
+                      placeholder="Enter your phone number (optional)"
+                    />
+                  </div>
+                  
+                  <div class="form-group">
+                    <label for="company" class="form-label">Company</label>
+                    <input 
+                      id="company"
+                      type="text"
+                      formControlName="company"
+                      class="form-control"
+                      placeholder="Enter your company name (optional)"
+                    />
+                  </div>
+                </div>
+                
+                <div class="form-group">
+                  <label for="subject" class="form-label">Subject *</label>
+                  <select 
+                    id="subject"
+                    formControlName="subject"
+                    class="form-control"
+                    [class.invalid]="contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched"
+                    required
+                  >
+                    <option value="" disabled>Select a subject</option>
+                    <option value="general">General Inquiry</option>
+                    <option value="content-creation">Content Creation</option>
+                    <option value="brand-identity">Brand Identity</option>
+                    <option value="web-development">Web Development</option>
+                    <option value="social-media">Social Media Management</option>
+                    <option value="consultation">Free Consultation</option>
+                    <option value="other">Other</option>
+                  </select>
+                  @if (contactForm.get('subject')?.invalid && contactForm.get('subject')?.touched) {
+                    <span class="form-error-text">Please select a subject</span>
+                  }
+                </div>
+                
+                <div class="form-group">
+                  <label for="message" class="form-label">Message *</label>
+                  <textarea 
+                    id="message"
+                    formControlName="message"
+                    class="form-control"
+                    [class.invalid]="contactForm.get('message')?.invalid && contactForm.get('message')?.touched"
+                    rows="5"
+                    placeholder="Tell us about your project, goals, and how we can help you..."
+                    required
+                  ></textarea>
+                  @if (contactForm.get('message')?.invalid && contactForm.get('message')?.touched) {
+                    <span class="form-error-text">Message is required</span>
+                  }
+                </div>
+                
+                <div class="form-group checkbox-group">
+                  <label class="checkbox-label">
+                    <input 
+                      type="checkbox"
+                      formControlName="newsletter"
+                      class="form-checkbox"
+                    />
+                    <span class="checkbox-mark"></span>
+                    <span class="checkbox-text">I'd like to receive updates about your services and special offers</span>
+                  </label>
+                </div>
+                
+                <button 
+                  type="submit"
+                  class="btn btn-primary btn-lg btn-block"
+                  [disabled]="contactForm.invalid || isSubmitting()"
+                >
+                  @if (isSubmitting()) {
+                    <span class="btn-spinner"></span>
+                    Sending...
+                  } @else {
+                    Send Message
+                    <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  }
+                </button>
+              </form>
             </div>
           </div>
         </div>
@@ -489,6 +622,203 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
       line-height: 1.5;
     }
 
+    .contact-form-fields {
+      padding: 2.5rem;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 1rem;
+      margin-top: 1rem;
+    }
+
+    .form-group.checkbox-group {
+      margin-bottom: 1rem;
+      margin-top: 1rem;
+    }
+
+    .form-label {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.5rem;
+      line-height: 1.2;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: 0.75rem;
+      font-size: 1rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      background: var(--input-bg);
+      transition: all var(--transition-base);
+      outline: none;
+      resize: vertical;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(var(--primary-rgb), 0.1);
+      background: var(--card-bg);
+    }
+
+    .form-control:hover:not(:focus) {
+      border-color: var(--text-muted);
+    }
+
+    .form-control.invalid {
+      border-color: var(--danger-color);
+      background: var(--danger-bg);
+    }
+
+    .form-control.invalid:focus {
+      border-color: var(--danger-color);
+      box-shadow: 0 0 0 3px rgba(var(--danger-rgb), 0.1);
+    }
+
+    .form-control::placeholder {
+      color: var(--placeholder-color);
+    }
+
+    .form-error-text {
+      font-size: 0.75rem;
+      color: var(--danger-color);
+      margin-top: 0.5rem;
+      display: block;
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      user-select: none;
+    }
+
+    .form-checkbox {
+      opacity: 0;
+      position: absolute;
+      pointer-events: none;
+    }
+
+    .checkbox-mark {
+      width: 18px;
+      height: 18px;
+      border: 2px solid var(--border-color);
+      border-radius: 0.25rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-base);
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .checkbox-mark::after {
+      content: '';
+      width: 10px;
+      height: 10px;
+      background: var(--primary);
+      border-radius: 0.125rem;
+      transform: scale(0);
+      transition: transform var(--transition-fast);
+    }
+
+    .form-checkbox:checked + .checkbox-mark {
+      border-color: var(--primary);
+      background: var(--primary-bg);
+    }
+
+    .form-checkbox:checked + .checkbox-mark::after {
+      transform: scale(1);
+    }
+
+    .checkbox-label:hover .checkbox-mark {
+      border-color: var(--primary);
+    }
+
+    .checkbox-text {
+      color: var(--text-secondary);
+    }
+
+    .btn-block {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .btn-spinner {
+      width: 16px;
+      height: 16px;
+      border: 2px solid transparent;
+      border-top: 2px solid currentColor;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 0.5rem;
+    }
+
+    .form-loading,
+    .form-success,
+    .form-error {
+      padding: 3rem 2.5rem;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 400px;
+    }
+
+    .form-loading {
+      background: var(--hover-bg);
+    }
+
+    .form-success {
+      background: var(--success-bg);
+    }
+
+    .form-error {
+      background: var(--danger-bg);
+    }
+
+    .success-icon {
+      width: 64px;
+      height: 64px;
+      color: var(--success-color);
+      margin-bottom: 1.5rem;
+    }
+
+    .success-icon svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .success-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin: 0 0 0.75rem 0;
+    }
+
+    .success-message {
+      color: var(--text-secondary);
+      margin: 0 0 2rem 0;
+      line-height: 1.6;
+      max-width: 300px;
+    }
+
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
@@ -502,11 +832,20 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
       .contact-info {
         position: static;
       }
+
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
     }
 
     @media (max-width: 768px) {
       .contact-grid {
         gap: 2rem;
+      }
+
+      .contact-form-fields {
+        padding: 2rem 1.5rem;
       }
     }
 
@@ -527,8 +866,8 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
         font-size: 1.5rem;
       }
       
-      .contact-iframe {
-        height: 500px;
+      .contact-form-fields {
+        padding: 1.5rem;
       }
 
       .contact-item {
@@ -559,46 +898,88 @@ import { SectionHeaderComponent } from '../section-header/section-header.compone
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ContactSectionComponent implements OnInit {
-  @ViewChild('contactIframe') iframeRef!: ElementRef<HTMLIFrameElement>;
-  
   private configService = inject(SiteConfigService);
+  private fb = inject(FormBuilder);
+  private http = inject(HttpClient);
 
   contact = this.configService.getContact();
   
-  // Loading states
-  isLoading = signal(true);
-  isLoaded = signal(false);
+  // Form states
+  isSubmitting = signal(false);
+  isSuccess = signal(false);
   hasError = signal(false);
+  errorMessage = signal<string>('');
+
+  // Contact form
+  contactForm: FormGroup = this.fb.group({
+    name: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    company: [''],
+    subject: ['', Validators.required],
+    message: ['', [Validators.required, Validators.minLength(10)]],
+    newsletter: [false]
+  });
+
+  // TODO: Replace with your actual endpoint
+  private readonly FORM_ENDPOINT = 'https://your-api-endpoint.com/contact';
 
   ngOnInit() {
-    // Set timeout for loading state in case iframe takes too long
-    setTimeout(() => {
-      if (!this.isLoaded() && !this.hasError()) {
-        this.onIframeError();
-      }
-    }, 15000); // 15 second timeout
+    // Form is ready immediately, no iframe loading needed
   }
 
-  onIframeLoad() {
-    this.isLoading.set(false);
-    this.isLoaded.set(true);
-    this.hasError.set(false);
-  }
-
-  onIframeError() {
-    this.isLoading.set(false);
-    this.isLoaded.set(false);
-    this.hasError.set(true);
-  }
-
-  retryLoading() {
-    this.isLoading.set(true);
-    this.isLoaded.set(false);
-    this.hasError.set(false);
-    
-    // Reload the iframe
-    if (this.iframeRef?.nativeElement) {
-      this.iframeRef.nativeElement.src = this.iframeRef.nativeElement.src;
+  onSubmit() {
+    if (this.contactForm.invalid) {
+      this.markFormGroupTouched();
+      return;
     }
+
+    this.isSubmitting.set(true);
+    this.hasError.set(false);
+    this.errorMessage.set('');
+
+    const formData = this.contactForm.value;
+    
+    // Add timestamp and form source
+    const payload = {
+      ...formData,
+      timestamp: new Date().toISOString(),
+      source: 'website-contact-form',
+      userAgent: navigator.userAgent
+    };
+
+    this.http.post(this.FORM_ENDPOINT, payload).subscribe({
+      next: (response) => {
+        this.isSubmitting.set(false);
+        this.isSuccess.set(true);
+        this.contactForm.reset();
+      },
+      error: (error) => {
+        this.isSubmitting.set(false);
+        this.hasError.set(true);
+        this.errorMessage.set(
+          error.error?.message || 
+          'There was an issue sending your message. Please try again.'
+        );
+        console.error('Contact form submission error:', error);
+      }
+    });
+  }
+
+  resetForm() {
+    this.isSuccess.set(false);
+    this.contactForm.reset();
+  }
+
+  resetError() {
+    this.hasError.set(false);
+    this.errorMessage.set('');
+  }
+
+  private markFormGroupTouched() {
+    Object.keys(this.contactForm.controls).forEach(key => {
+      const control = this.contactForm.get(key);
+      control?.markAsTouched();
+    });
   }
 }

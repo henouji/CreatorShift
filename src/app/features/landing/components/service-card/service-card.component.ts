@@ -7,7 +7,7 @@ import { ServiceItem } from '../../models/site-config.model';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="service-card" [class.featured]="featured">
+    <div class="service-card">
       <div class="service-icon-wrapper">
         <div class="service-icon">
           <ng-container [ngSwitch]="service.icon">
@@ -90,6 +90,8 @@ import { ServiceItem } from '../../models/site-config.model';
       &:hover {
         transform: translateY(-10px);
         box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        background: linear-gradient(135deg, var(--primary) 0%, #e94560 100%);
+        color: white;
 
         &::before {
           transform: scaleX(1);
@@ -97,33 +99,17 @@ import { ServiceItem } from '../../models/site-config.model';
 
         .service-icon-wrapper {
           transform: scale(1.1);
-        }
-
-        .service-link {
-          color: var(--primary);
-
-          .arrow-icon {
-            transform: translateX(4px);
-          }
-        }
-      }
-
-      &.featured {
-        background: linear-gradient(135deg, var(--primary) 0%, #e94560 100%);
-        color: white;
-
-        .service-title,
-        .service-description,
-        .service-feature {
-          color: white;
-        }
-
-        .service-icon-wrapper {
           background: rgba(255, 255, 255, 0.2);
         }
 
         .service-icon svg {
           stroke: white;
+        }
+
+        .service-title,
+        .service-description,
+        .service-feature {
+          color: white;
         }
 
         .check-icon {
@@ -132,6 +118,10 @@ import { ServiceItem } from '../../models/site-config.model';
 
         .service-link {
           color: white;
+
+          .arrow-icon {
+            transform: translateX(4px);
+          }
         }
       }
     }
@@ -216,5 +206,4 @@ import { ServiceItem } from '../../models/site-config.model';
 })
 export class ServiceCardComponent {
   @Input({ required: true }) service!: ServiceItem;
-  @Input() featured = false;
 }

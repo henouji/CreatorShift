@@ -21,7 +21,6 @@ import { ServiceCardComponent } from '../service-card/service-card.component';
           @for (service of services.items; track service.id; let i = $index) {
             <app-service-card 
               [service]="service"
-              [featured]="i === 0"
               class="service-item"
               [style.animation-delay]="i * 100 + 'ms'">
             </app-service-card>
@@ -56,15 +55,19 @@ import { ServiceCardComponent } from '../service-card/service-card.component';
 
     .services-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
 
       @media (max-width: 1200px) {
         grid-template-columns: repeat(2, 1fr);
+        max-width: 700px;
       }
 
       @media (max-width: 640px) {
         grid-template-columns: 1fr;
+        max-width: 400px;
       }
     }
 
